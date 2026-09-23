@@ -23,6 +23,7 @@ export class DuneRockWorldController extends hz.Component<
     WorldLifecycleState.Initializing;
 
   start() {
+    
     console.log(
       `[DuneRock] World controller started. State: ${this.currentState}`
     );
