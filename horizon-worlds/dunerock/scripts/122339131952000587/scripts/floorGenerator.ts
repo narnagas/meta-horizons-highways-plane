@@ -6,5 +6,9 @@ export class floorGenerator extends hz.Component<typeof floorGenerator> {
   start() {
     console.log("[DuneRock] Floor generator started.");
   }
+  
+  public generate(): void {
+    console.log("[DuneRock] Floor generation requested.");
+  }
 }
 hz.Component.register(floorGenerator);
