@@ -98,6 +98,14 @@ export class FloorGenerator extends hz.Component<
     return cells;
   }
 
+  private cellToWorld(cell: FloorCell): hz.Vec3 {
+    return new hz.Vec3(
+      cell.x * this.cellSize,
+      0,
+      cell.z * this.cellSize
+    );
+  }
+
   private getRadiusAtAngle(angle: number): number {
     const variation =
       Math.sin(angle * 5) * 0.55 +
