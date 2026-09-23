@@ -9,7 +9,11 @@ type FloorCell = {
 export class FloorGenerator extends hz.Component<
   typeof FloorGenerator
 > {
-  static propsDefinition = {};
+  static propsDefinition = {
+    floorAsset: {
+      type: hz.PropTypes.Asset,
+    },
+  };
 
   private readonly cellSize = 4;
   private readonly baseRadius = 40;
