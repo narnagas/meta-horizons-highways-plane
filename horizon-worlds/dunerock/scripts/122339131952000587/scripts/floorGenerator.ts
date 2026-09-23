@@ -15,9 +15,10 @@ export class FloorGenerator extends hz.Component<
       },
     };
 
-  private readonly cellSize = 4;
-  private readonly baseRadius = 40;
-  private readonly edgeVariation = 8;
+    private readonly cellSize = 4;
+    private readonly floorElevation = 0.2;
+    private readonly baseRadius = 40;
+    private readonly edgeVariation = 8;
 
   start() {
     console.log("[DuneRock] Floor generator ready.");
@@ -57,6 +58,25 @@ export class FloorGenerator extends hz.Component<
       `[DuneRock] Test floor asset spawned at ` +
       `(${position.x}, ${position.y}, ${position.z}).`
     );
+
+      const neighborCell: FloorCell = {
+        x: 1,
+        z: 0,
+        isEdge: false,
+      };
+
+      const neighborPosition =
+        this.cellToWorld(neighborCell);
+
+      await this.world.spawnAsset(
+        this.props.floorAsset,
+        neighborPosition
+      );
+
+      console.log(
+        `[DuneRock] Neighbor floor asset spawned at ` +
+        `(${neighborPosition.x}, ${neighborPosition.y}, ${neighborPosition.z}).`
+      );
   }
 
   private generateFloorCells(): FloorCell[] {
@@ -124,7 +144,7 @@ export class FloorGenerator extends hz.Component<
   private cellToWorld(cell: FloorCell): hz.Vec3 {
     return new hz.Vec3(
       cell.x * this.cellSize,
-      0,
+      this.floorElevation,
       cell.z * this.cellSize
     );
   }
