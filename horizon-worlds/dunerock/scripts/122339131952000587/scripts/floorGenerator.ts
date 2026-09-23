@@ -1,6 +1,6 @@
 import * as hz from 'horizon/core';
 
-class floorGenerator extends hz.Component<typeof floorGenerator> {
+export class floorGenerator extends hz.Component<typeof floorGenerator> {
   static propsDefinition = {};
 
   start() {
