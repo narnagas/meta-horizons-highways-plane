@@ -1,3 +1,4 @@
+import { floorGenerator } from "floorGenerator";
 import * as hz from "horizon/core";
 
 enum WorldLifecycleState {
@@ -12,7 +13,11 @@ enum WorldLifecycleState {
 export class DuneRockWorldController extends hz.Component<
   typeof DuneRockWorldController
 > {
-  static propsDefinition = {};
+  static propsDefinition = {
+    floorGenerator: {
+      type: hz.PropTypes.Entity,
+    }
+  };
 
   private currentState: WorldLifecycleState =
     WorldLifecycleState.Initializing;
