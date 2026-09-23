@@ -21,6 +21,18 @@ export class DuneRockWorldController extends hz.Component<
     console.log(
       `[DuneRock] World controller started. State: ${this.currentState}`
     );
+
+    this.transitionTo(WorldLifecycleState.GeneratingFloor);
+  }
+
+  private transitionTo(nextState: WorldLifecycleState): void {
+    const previousState = this.currentState;
+
+    this.currentState = nextState;
+
+    console.log(
+      `[DuneRock] Lifecycle: ${previousState} -> ${this.currentState}`
+    );
   }
 }
 
