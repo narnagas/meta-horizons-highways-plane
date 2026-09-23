@@ -3,6 +3,7 @@ import * as hz from "horizon/core";
 type FloorCell = {
   x: number;
   z: number;
+  isEdge: boolean;
 };
 
 export class FloorGenerator extends hz.Component<
@@ -23,8 +24,15 @@ export class FloorGenerator extends hz.Component<
 
     const cells = this.generateFloorCells();
 
+    const edgeCells =
+    cells.filter((cell) => cell.isEdge);
+
+    const interiorCells =
+    cells.filter((cell) => !cell.isEdge);
+
     console.log(
-      `[DuneRock] Generated floor footprint: ${cells.length} cells.`
+      `[DuneRock] Generated floor footprint: ${cells.length} cells ` +
+      `(${interiorCells.length} interior, ${edgeCells.length} edge).`
     );
   }
 
@@ -58,9 +66,33 @@ export class FloorGenerator extends hz.Component<
           cells.push({
             x,
             z,
+            isEdge: false,
           });
         }
       }
+    }
+
+    /* ==============================
+      Edge Cells Verification
+    ================================*/
+    const cellKeys = new Set(
+      cells.map(
+        (cell) => `${cell.x},${cell.z}`
+      )
+    );
+
+    for (const cell of cells) {
+      const neighbors = [
+        `${cell.x + 1},${cell.z}`,
+        `${cell.x - 1},${cell.z}`,
+        `${cell.x},${cell.z + 1}`,
+        `${cell.x},${cell.z - 1}`,
+      ];
+
+      cell.isEdge =
+        neighbors.some(
+          (neighbor) => !cellKeys.has(neighbor)
+        );
     }
 
     return cells;
