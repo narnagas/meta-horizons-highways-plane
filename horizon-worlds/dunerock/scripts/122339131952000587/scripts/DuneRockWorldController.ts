@@ -1,4 +1,4 @@
-import { floorGenerator } from "floorGenerator";
+import { FloorGenerator } from "floorGenerator";
 import * as hz from "horizon/core";
 
 enum WorldLifecycleState {
@@ -29,15 +29,15 @@ export class DuneRockWorldController extends hz.Component<
     
     this.transitionTo(WorldLifecycleState.GeneratingFloor);
 
-    const floorgenerator = this.props.floorGenerator?.getComponents(floorGenerator)[0];
+    const floorGenerator = this.props.floorGenerator?.getComponents(FloorGenerator)[0];
 
-    if(!floorgenerator){
+    if(!floorGenerator){
       console.error("[DuneRock] FloorGenerator component was not found.");
 
       return;
     }
 
-    floorgenerator.generate();
+    floorGenerator.generate();
   }
 
   private transitionTo(nextState: WorldLifecycleState): void {
