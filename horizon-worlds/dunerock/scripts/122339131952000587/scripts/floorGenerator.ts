@@ -1,13 +1,10 @@
-import * as hz from "horizon/core";
+import * as hz from 'horizon/core';
 
-export class FloorGenerator extends hz.Component<
-  typeof FloorGenerator
-> {
+class floorGenerator extends hz.Component<typeof floorGenerator> {
   static propsDefinition = {};
 
   start() {
-    console.log("[DuneRock] Floor generator started.");
+
   }
 }
-
-hz.Component.register(FloorGenerator);
+hz.Component.register(floorGenerator);
