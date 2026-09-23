@@ -9,11 +9,11 @@ type FloorCell = {
 export class FloorGenerator extends hz.Component<
   typeof FloorGenerator
 > {
-  static propsDefinition = {
-    floorAsset: {
-      type: hz.PropTypes.Asset,
-    },
-  };
+    static propsDefinition = {
+      floorAsset: {
+        type: hz.Asset,
+      },
+    };
 
   private readonly cellSize = 4;
   private readonly baseRadius = 40;
@@ -23,7 +23,7 @@ export class FloorGenerator extends hz.Component<
     console.log("[DuneRock] Floor generator ready.");
   }
 
-  public generate(): void {
+  public async generate(): Promise<void> {
     console.log("[DuneRock] Floor generation requested.");
 
     const cells = this.generateFloorCells();
@@ -37,6 +37,25 @@ export class FloorGenerator extends hz.Component<
     console.log(
       `[DuneRock] Generated floor footprint: ${cells.length} cells ` +
       `(${interiorCells.length} interior, ${edgeCells.length} edge).`
+    );
+
+    const testCell: FloorCell = {
+      x: 0,
+      z: 0,
+      isEdge: false,
+    };
+
+    const position =
+      this.cellToWorld(testCell);
+
+    await this.world.spawnAsset(
+      this.props.floorAsset,
+      position
+    );
+
+    console.log(
+      `[DuneRock] Test floor asset spawned at ` +
+      `(${position.x}, ${position.y}, ${position.z}).`
     );
   }
 
