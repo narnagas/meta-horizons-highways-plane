@@ -1,4 +1,4 @@
-import * as hz from "horizon/core";
+import * as hz from 'horizon/core';
 
 type FloorCell = {
   x: number;
@@ -6,16 +6,14 @@ type FloorCell = {
   isEdge: boolean;
 };
 
-export class FloorGenerator extends hz.Component<
-  typeof FloorGenerator
-> {
+export class DuneRockFloorGenerator extends hz.Component<typeof DuneRockFloorGenerator> {
     static propsDefinition = {
       floorAsset: {
-        type: hz.Asset,
+        type: hz.PropTypes.Asset,
       },
     };
 
-    private readonly cellSize = 4;
+    private readonly cellSize = 2;
     private readonly floorElevation = 0.2;
     private readonly baseRadius = 40;
     private readonly edgeVariation = 8;
@@ -26,6 +24,16 @@ export class FloorGenerator extends hz.Component<
 
   public async generate(): Promise<void> {
     console.log("[DuneRock] Floor generation requested.");
+
+    const floorAsset = this.props.floorAsset;
+
+    if (!floorAsset) {
+      console.error(
+        "[DuneRock] Floor asset is not assigned."
+      );
+
+      return;
+    }
 
     const cells = this.generateFloorCells();
 
@@ -40,43 +48,25 @@ export class FloorGenerator extends hz.Component<
       `(${interiorCells.length} interior, ${edgeCells.length} edge).`
     );
 
-    const testCell: FloorCell = {
-      x: 0,
-      z: 0,
-      isEdge: false,
-    };
-
-    const position =
-      this.cellToWorld(testCell);
-
-    await this.world.spawnAsset(
-      this.props.floorAsset,
-      position
-    );
-
     console.log(
-      `[DuneRock] Test floor asset spawned at ` +
-      `(${position.x}, ${position.y}, ${position.z}).`
+      `[DuneRock] Spawning ${cells.length} floor assets.`
     );
 
-      const neighborCell: FloorCell = {
-        x: 1,
-        z: 0,
-        isEdge: false,
-      };
-
-      const neighborPosition =
-        this.cellToWorld(neighborCell);
+    for (const cell of cells) {
+      const position =
+        this.cellToWorld(cell);
 
       await this.world.spawnAsset(
-        this.props.floorAsset,
-        neighborPosition
+        floorAsset,
+        position
       );
+    }
 
-      console.log(
-        `[DuneRock] Neighbor floor asset spawned at ` +
-        `(${neighborPosition.x}, ${neighborPosition.y}, ${neighborPosition.z}).`
-      );
+    console.log(
+      `[DuneRock] Floor asset spawning complete: ${cells.length} assets.`
+    );
+
+  
   }
 
   private generateFloorCells(): FloorCell[] {
@@ -162,4 +152,4 @@ export class FloorGenerator extends hz.Component<
   }
 }
 
-hz.Component.register(FloorGenerator);
+hz.Component.register(DuneRockFloorGenerator);
