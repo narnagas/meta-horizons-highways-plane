@@ -17,6 +17,7 @@ export class DuneRockFloorGenerator extends hz.Component<typeof DuneRockFloorGen
     private readonly floorElevation = 0.2;
     private readonly baseRadius = 40;
     private readonly edgeVariation = 8;
+    private readonly spawnBatchSize = 10;
 
   start() {
     console.log("[DuneRock] Floor generator ready.");
@@ -52,13 +53,26 @@ export class DuneRockFloorGenerator extends hz.Component<typeof DuneRockFloorGen
       `[DuneRock] Spawning ${cells.length} floor assets.`
     );
 
-    for (const cell of cells) {
-      const position =
-        this.cellToWorld(cell);
+    for (
+      let i = 0;
+      i < cells.length;
+      i += this.spawnBatchSize
+    ) {
+      const batch =
+        cells.slice(i, i + this.spawnBatchSize);
 
-      await this.world.spawnAsset(
-        floorAsset,
-        position
+      await Promise.all(
+        batch.map((cell) => {
+          const position =
+            this.cellToWorld(cell);
+
+          return this.world.spawnAsset(
+            floorAsset,
+            position,
+            hz.Quaternion
+            .fromEuler(new hz.Vec3(0,0,270))
+          );
+        })
       );
     }
 
